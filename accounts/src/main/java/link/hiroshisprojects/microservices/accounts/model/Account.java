@@ -1,23 +1,34 @@
 package link.hiroshisprojects.microservices.accounts.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.experimental.Accessors;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
+@Accessors(chain = true)
 @Getter @Setter @ToString
 public class Account {
    @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    private long accountId;
-   private long customerId;
+
+   @ManyToOne
+   @JsonBackReference
+   private Customer customer;
+
+   @NotNull(message = "Account type is required.")
    private AccountType accountType;
+
    private String branchAddress;
-   private LocalDate createDate;
+
+   @Column(name="create_date", nullable = false)
+   private LocalDateTime createDate;
+
+
 }
